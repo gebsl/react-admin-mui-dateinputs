@@ -4,8 +4,6 @@ import clsx from 'clsx';
 import { useInput, FieldTitle, sanitizeInputRestProps, InputHelperText, CommonInputProps } from 'react-admin';
 import InputAdornment from '@mui/material/InputAdornment';
 import Event from '@mui/icons-material/Event';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import type { MobileDatePicker, MobileTimePicker, MobileDateTimePicker } from '@mui/x-date-pickers';
 import CustomActionBar from './CustomActionBar';
 import { formatDateTime, parseDateTime } from '../utils';
@@ -70,53 +68,51 @@ const Picker = (props: PickerProps) => {
     const renderHelperText = false !== helperText || ((isTouched || isSubmitted) && invalid);
 
     return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <PickerComponent
-                {...sanitizeInputRestProps(rest)}
-                {...field}
-                {...pickerOptions}
-                id={id}
-                label={<FieldTitle label={label} source={source} resource={resource} isRequired={isRequired} />}
-                slots={{
-                    actionBar: CustomActionBar,
-                }}
-                slotProps={{
-                    textField: {
-                        variant,
-                        size,
-                        margin,
-                        fullWidth,
-                        onBlur: field.onBlur,
-                        error: hasError,
-                        helperText: renderHelperText ? (
-                            <InputHelperText
-                                touched={isTouched || isSubmitted}
-                                error={error?.message}
-                                helperText={helperText}
-                            />
-                        ) : null,
-                        InputProps: {
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <Event />
-                                </InputAdornment>
-                            ),
-                        },
+        <PickerComponent
+            {...sanitizeInputRestProps(rest)}
+            {...field}
+            {...pickerOptions}
+            id={id}
+            label={<FieldTitle label={label} source={source} resource={resource} isRequired={isRequired} />}
+            slots={{
+                actionBar: CustomActionBar,
+            }}
+            slotProps={{
+                textField: {
+                    variant,
+                    size,
+                    margin,
+                    fullWidth,
+                    onBlur: field.onBlur,
+                    error: hasError,
+                    helperText: renderHelperText ? (
+                        <InputHelperText
+                            touched={isTouched || isSubmitted}
+                            error={error?.message}
+                            helperText={helperText}
+                        />
+                    ) : null,
+                    InputProps: {
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <Event />
+                            </InputAdornment>
+                        ),
                     },
-                    actionBar: {
-                        actions: toolbarActions,
-                        handleChange,
-                        setFragileValue,
-                    },
-                }}
-                className={clsx('ra-input', `ra-input-${source}`, className)}
-                value={field.value ? new Date(field.value) : null}
-                onChange={(value, context) => setFragileValue(value)}
-                onOpen={value => (onOpen && 'function' === typeof onOpen ? onOpen(value) : null)}
-                onClose={value => (onClose && 'function' === typeof onClose ? onClose(value) : null)}
-                onAccept={value => handleChange(fragileValue)}
-            />
-        </LocalizationProvider>
+                },
+                actionBar: {
+                    actions: toolbarActions,
+                    handleChange,
+                    setFragileValue,
+                },
+            }}
+            className={clsx('ra-input', `ra-input-${source}`, className)}
+            value={field.value ? new Date(field.value) : null}
+            onChange={(value, context) => setFragileValue(value)}
+            onOpen={value => (onOpen && 'function' === typeof onOpen ? onOpen(value) : null)}
+            onClose={value => (onClose && 'function' === typeof onClose ? onClose(value) : null)}
+            onAccept={value => handleChange(fragileValue)}
+        />
     );
 };
 
